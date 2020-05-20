@@ -1,66 +1,83 @@
 openapi: 3.0.1
 info:
-  title: QRZ XML Logbook Data Specification
-  description: 'This document describes the interface specification for access to QRZ''s XML subscription data service. This service provides real-time access to information from the QRZ.COM servers and databases.
-
-  Access to this service requires user authentication through the use of a valid QRZ.COM username and password. While any QRZ user may login to the service, an active QRZ Logbook Data subscription is required to access most of its features. Non-subscriber access limits the data fields that are returned and is primarily intended for testing and troubleshooting purposes only.
-
-  A description of subscription plans and rates is available on the [QRZ website](http://www.qrz.com/i/subscriptions.html).'
   contact:
     email: flloyd@qrz.com
-  version: '1.33'
+  description: |-
+    This document describes the interface specification for access to QRZ's XML subscription data service. This service provides real-time access to information from the QRZ.COM servers and databases.
+    Access to this service requires user authentication through the use of a valid QRZ.COM username and password. While any QRZ user may login to the service, an active QRZ Logbook Data subscription is required to access most of its features. Non-subscriber access limits the data fields that are returned and is primarily intended for testing and troubleshooting purposes only.
+    A description of subscription plans and rates is available on the [QRZ website](http://www.qrz.com/i/subscriptions.html).
+  title: QRZ XML Logbook Data Specification
+  version: "1.33"
 externalDocs:
   description: Textual description of the spec
   url: https://www.qrz.com/XML/current_spec.html
 servers:
-  - url: https://xmldata.qrz.com/xml/1.33
-  - url: http://xmldata.qrz.com/xml/1.33
+- url: https://xmldata.qrz.com/xml/1.33
+- url: http://xmldata.qrz.com/xml/1.33
 paths:
   /:
     get:
-      summary: The do-everything endpoint
       parameters:
-        - name: username
-          in: query
-          schema:
+      - explode: true
+        in: query
+        name: username
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: password
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: agent
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: session token
+        explode: true
+        in: query
+        name: s
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: perform a callsign info lookup
+        explode: true
+        in: query
+        name: callsign
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: perform a DXCC info lookup
+        explode: true
+        in: query
+        name: dxcc
+        required: false
+        schema:
+          oneOf:
+          - type: number
+          - enum:
+            - all
             type: string
-        - name: password
-          in: query
-          schema:
-            type: string
-        - name: agent
-          in: query
-          schema:
-            type: string
-        - name: s
-          description: session token
-          in: query
-          schema:
-            type: string
-        - name: callsign
-          description: perform a callsign info lookup
-          in: query
-          schema:
-            type: string
-        - name: dxcc
-          description: perform a DXCC info lookup
-          in: query
-          schema:
-            oneOf:
-              - type: number
-              - type: string
-                enum: [all]
+        style: form
       responses:
-        200:
-          description: response
+        "200":
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/QRZDatabase'
+          description: response
+      summary: The do-everything endpoint
 components:
   schemas:
     QRZDatabase:
-      type: object
       properties:
         Session:
           $ref: '#/components/schemas/Session'
@@ -68,32 +85,37 @@ components:
           $ref: '#/components/schemas/Callsign'
         DXCC:
           $ref: '#/components/schemas/DXCC'
-    Session:
       type: object
+    Session:
       properties:
         Key:
-          description: a valid user session key. A user session is established whenever a session key is returned. Any response from the server that does not contain the Key element indicates that no valid session exists and that a re-login is required to continue.
+          description: a valid user session key. A user session is established whenever
+            a session key is returned. Any response from the server that does not
+            contain the Key element indicates that no valid session exists and that
+            a re-login is required to continue.
           type: string
         Count:
-          description: Number of lookups performed by this user in the current 24 hour period
-          type: number
+          description: Number of lookups performed by this user in the current 24
+            hour period
           format: int64
+          type: number
         SubExp:
-          description: time and date that the users subscription will expire - or - "non-subscriber"
-          type: string
+          description: time and date that the users subscription will expire - or
+            - "non-subscriber"
           format: asctime
+          type: string
         GMTime:
           description: Time stamp for this message
-          type: string
           format: asctime
+          type: string
         Message:
           description: An informational message for the user
           type: string
         Error:
           description: XML system error message
           type: string
-    Callsign:
       type: object
+    Callsign:
       properties:
         call:
           description: callsign
@@ -132,13 +154,13 @@ components:
           description: dxcc entity code for the mailing address country
           type: string
         lat:
-          description: 'lattitude of address (signed decimal) S < 0 > N'
-          type: number
+          description: lattitude of address (signed decimal) S < 0 > N
           format: double
+          type: number
         lon:
-          description: 'longitude of address (signed decimal) W < 0 > E'
-          type: number
+          description: longitude of address (signed decimal) W < 0 > E
           format: double
+          type: number
         grid:
           description: Maidenhead grid locator
           type: string
@@ -153,12 +175,12 @@ components:
           type: string
         efdate:
           description: license effective date (USA)
-          type: string
           format: date
+          type: string
         expdate:
           description: license expiration date (USA)
-          type: string
           format: date
+          type: string
         p_call:
           description: previous callsign
           type: string
@@ -173,16 +195,16 @@ components:
           type: string
         email:
           description: email address
-          type: string
           format: email
+          type: string
         url:
           description: web page address
-          type: string
           format: uri
+          type: string
         u_views:
           description: QRZ web page views
-          type: number
           format: int64
+          type: number
         bio:
           description: approximate length of the bio HTML in bytes
           type: string
@@ -191,10 +213,10 @@ components:
           type: string
         image:
           description: full URL of the callsign's primary image
-          type: string
           format: uri
+          type: string
         imageinfo:
-          description: 'height:width:size in bytes, of the image file'
+          description: height:width:size in bytes, of the image file
           type: string
         serial:
           description: QRZ db serial number
@@ -231,8 +253,8 @@ components:
           type: string
         born:
           description: operator's year of birth
-          type: number
           format: int32
+          type: number
         user:
           description: User who manages this callsign on QRZ
           type: string
@@ -245,8 +267,8 @@ components:
         geoloc:
           description: Describes source of lat/long data
           type: string
-    DXCC:
       type: object
+    DXCC:
       properties:
         dxcc:
           description: DXCC entity number for this record
@@ -270,17 +292,19 @@ components:
           description: CQ Zone
           type: string
         timezone:
-          description: timezone offset +/- UTC in hours. Odd timezones, such as 0545 mean "5 hours, 45 minutes". The plus (+) sign is implied.
-          type: integer
+          description: timezone offset +/- UTC in hours. Odd timezones, such as 0545
+            mean "5 hours, 45 minutes". The plus (+) sign is implied.
           format: int32
+          type: integer
         lat:
           description: Latitude (approx.)
-          type: number
           format: double
+          type: number
         lon:
           description: Longitude (approx.)
-          type: number
           format: double
+          type: number
         notes:
           description: Special notes and/or exceptions
           type: string
+      type: object
