@@ -1,0 +1,57 @@
+# Callsign
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**Call** | **string** | callsign | [optional] 
+**Xref** | **string** | Cross reference: the query callsign that returned this record | [optional] 
+**Aliases** | **string** | Other callsigns that resolve to this record | [optional] 
+**Dxcc** | **string** | DXCC entity ID (country code) for the callsign | [optional] 
+**Fname** | **string** | first name | [optional] 
+**Name** | **string** | last name | [optional] 
+**Addr1** | **string** | address line 1 (i.e. house # and street) | [optional] 
+**Addr2** | **string** | address line 2 (i.e, city name) | [optional] 
+**State** | **string** | state (USA Only) | [optional] 
+**Zip** | **string** | Zip/postal code | [optional] 
+**Country** | **string** | country name for the QSL mailing address | [optional] 
+**Ccode** | **string** | dxcc entity code for the mailing address country | [optional] 
+**Lat** | **float64** | lattitude of address (signed decimal) S &lt; 0 &gt; N | [optional] 
+**Lon** | **float64** | longitude of address (signed decimal) W &lt; 0 &gt; E | [optional] 
+**Grid** | **string** | Maidenhead grid locator | [optional] 
+**County** | **string** | county name (USA) | [optional] 
+**Fips** | **string** | FIPS county identifier (USA) | [optional] 
+**Land** | **string** | DXCC country name of the callsign | [optional] 
+**Efdate** | **string** | license effective date (USA) | [optional] 
+**Expdate** | **string** | license expiration date (USA) | [optional] 
+**PCall** | **string** | previous callsign | [optional] 
+**Class** | **string** | license class | [optional] 
+**Codes** | **string** | license type codes (USA) | [optional] 
+**Qslmgr** | **string** | QSL manager info | [optional] 
+**Email** | **string** | email address | [optional] 
+**Url** | **string** | web page address | [optional] 
+**UViews** | **float32** | QRZ web page views | [optional] 
+**Bio** | **string** | approximate length of the bio HTML in bytes | [optional] 
+**Biodate** | **string** | date of the last bio update | [optional] 
+**Image** | **string** | full URL of the callsign&#39;s primary image | [optional] 
+**Imageinfo** | **string** | height:width:size in bytes, of the image file | [optional] 
+**Serial** | **string** | QRZ db serial number | [optional] 
+**Moddate** | **string** | QRZ callsign last modified date | [optional] 
+**MSA** | **string** | Metro Service Area (USPS) | [optional] 
+**AreaCode** | **string** | Telephone Area Code (USA) | [optional] 
+**TimeZone** | **string** | Time Zone (USA) | [optional] 
+**GMTOffset** | **string** | GMT Time Offset | [optional] 
+**DST** | **string** | Daylight Saving Time Observed | [optional] 
+**Eqsl** | **string** | Will accept e-qsl (0/1 or blank if unknown) | [optional] 
+**Mqsl** | **string** | Will return paper QSL (0/1 or blank if unknown) | [optional] 
+**Cqzone** | **string** | CQ Zone identifier | [optional] 
+**Ituzone** | **string** | ITU Zone identifier | [optional] 
+**Born** | **float32** | operator&#39;s year of birth | [optional] 
+**User** | **string** | User who manages this callsign on QRZ | [optional] 
+**Lotw** | **string** | Will accept LOTW (0/1 or blank if unknown) | [optional] 
+**Iota** | **string** | IOTA Designator (blank if unknown) | [optional] 
+**Geoloc** | **string** | Describes source of lat/long data | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
