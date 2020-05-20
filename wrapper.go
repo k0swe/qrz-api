@@ -1,6 +1,7 @@
 package qrz
 
 import (
+	"context"
 	"errors"
 	"github.com/antihax/optional"
 )
@@ -8,8 +9,8 @@ import (
 const agent = "xylo-go-1.0"
 
 func Lookup(user *string, pw *string, call *string) (*QrzDatabase, error) {
-	var config *Configuration
-	config = NewConfiguration()
+	config := NewConfiguration()
+	config.UserAgent = agent
 	client := NewAPIClient(config)
 
 	sessResp, err := login(user, pw, client)
@@ -30,12 +31,11 @@ func Lookup(user *string, pw *string, call *string) (*QrzDatabase, error) {
 }
 
 func login(user *string, pw *string, client *APIClient) (*QrzDatabase, error) {
-	var req *RootGetOpts
-	req = new(RootGetOpts)
+	req := new(RootGetOpts)
 	req.Username = optional.NewString(*user)
 	req.Password = optional.NewString(*pw)
 	req.Agent = optional.NewString(agent)
-	sessResp, _, err := client.DefaultApi.RootGet(nil, req)
+	sessResp, _, err := client.DefaultApi.RootGet(context.TODO(), req)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func lookupInner(sessionKey string, call *string, client *APIClient) (*QrzDataba
 	req.S = optional.NewString(sessionKey)
 	req.Agent = optional.NewString(agent)
 	req.Callsign = optional.NewString(*call)
-	lookupResp, _, err := client.DefaultApi.RootGet(nil, req)
+	lookupResp, _, err := client.DefaultApi.RootGet(context.TODO(), req)
 	if err != nil {
 		return nil, err
 	}
