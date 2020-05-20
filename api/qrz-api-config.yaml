@@ -1,0 +1,4 @@
+packageName: qrz
+withGoCodegenComment: true
+withXml: true
+

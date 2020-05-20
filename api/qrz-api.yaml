@@ -1,0 +1,286 @@
+openapi: 3.0.1
+info:
+  title: QRZ XML Logbook Data Specification
+  description: 'This document describes the interface specification for access to QRZ''s XML subscription data service. This service provides real-time access to information from the QRZ.COM servers and databases.
+
+  Access to this service requires user authentication through the use of a valid QRZ.COM username and password. While any QRZ user may login to the service, an active QRZ Logbook Data subscription is required to access most of its features. Non-subscriber access limits the data fields that are returned and is primarily intended for testing and troubleshooting purposes only.
+
+  A description of subscription plans and rates is available on the [QRZ website](http://www.qrz.com/i/subscriptions.html).'
+  contact:
+    email: flloyd@qrz.com
+  version: '1.33'
+externalDocs:
+  description: Textual description of the spec
+  url: https://www.qrz.com/XML/current_spec.html
+servers:
+  - url: https://xmldata.qrz.com/xml/1.33
+  - url: http://xmldata.qrz.com/xml/1.33
+paths:
+  /:
+    get:
+      summary: The do-everything endpoint
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+        - name: password
+          in: query
+          schema:
+            type: string
+        - name: agent
+          in: query
+          schema:
+            type: string
+        - name: s
+          description: session token
+          in: query
+          schema:
+            type: string
+        - name: callsign
+          description: perform a callsign info lookup
+          in: query
+          schema:
+            type: string
+        - name: dxcc
+          description: perform a DXCC info lookup
+          in: query
+          schema:
+            oneOf:
+              - type: number
+              - type: string
+                enum: [all]
+      responses:
+        200:
+          description: response
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/QRZDatabase'
+components:
+  schemas:
+    QRZDatabase:
+      type: object
+      properties:
+        Session:
+          $ref: '#/components/schemas/Session'
+        Callsign:
+          $ref: '#/components/schemas/Callsign'
+        DXCC:
+          $ref: '#/components/schemas/DXCC'
+    Session:
+      type: object
+      properties:
+        Key:
+          description: a valid user session key. A user session is established whenever a session key is returned. Any response from the server that does not contain the Key element indicates that no valid session exists and that a re-login is required to continue.
+          type: string
+        Count:
+          description: Number of lookups performed by this user in the current 24 hour period
+          type: number
+          format: int64
+        SubExp:
+          description: time and date that the users subscription will expire - or - "non-subscriber"
+          type: string
+          format: asctime
+        GMTime:
+          description: Time stamp for this message
+          type: string
+          format: asctime
+        Message:
+          description: An informational message for the user
+          type: string
+        Error:
+          description: XML system error message
+          type: string
+    Callsign:
+      type: object
+      properties:
+        call:
+          description: callsign
+          type: string
+        xref:
+          description: 'Cross reference: the query callsign that returned this record'
+          type: string
+        aliases:
+          description: Other callsigns that resolve to this record
+          type: string
+        dxcc:
+          description: DXCC entity ID (country code) for the callsign
+          type: string
+        fname:
+          description: first name
+          type: string
+        name:
+          description: last name
+          type: string
+        addr1:
+          description: 'address line 1 (i.e. house # and street)'
+          type: string
+        addr2:
+          description: address line 2 (i.e, city name)
+          type: string
+        state:
+          description: state (USA Only)
+          type: string
+        zip:
+          description: Zip/postal code
+          type: string
+        country:
+          description: country name for the QSL mailing address
+          type: string
+        ccode:
+          description: dxcc entity code for the mailing address country
+          type: string
+        lat:
+          description: 'lattitude of address (signed decimal) S < 0 > N'
+          type: number
+          format: double
+        lon:
+          description: 'longitude of address (signed decimal) W < 0 > E'
+          type: number
+          format: double
+        grid:
+          description: Maidenhead grid locator
+          type: string
+        county:
+          description: county name (USA)
+          type: string
+        fips:
+          description: FIPS county identifier (USA)
+          type: string
+        land:
+          description: DXCC country name of the callsign
+          type: string
+        efdate:
+          description: license effective date (USA)
+          type: string
+          format: date
+        expdate:
+          description: license expiration date (USA)
+          type: string
+          format: date
+        p_call:
+          description: previous callsign
+          type: string
+        class:
+          description: license class
+          type: string
+        codes:
+          description: license type codes (USA)
+          type: string
+        qslmgr:
+          description: QSL manager info
+          type: string
+        email:
+          description: email address
+          type: string
+          format: email
+        url:
+          description: web page address
+          type: string
+          format: uri
+        u_views:
+          description: QRZ web page views
+          type: number
+          format: int64
+        bio:
+          description: approximate length of the bio HTML in bytes
+          type: string
+        biodate:
+          description: date of the last bio update
+          type: string
+        image:
+          description: full URL of the callsign's primary image
+          type: string
+          format: uri
+        imageinfo:
+          description: 'height:width:size in bytes, of the image file'
+          type: string
+        serial:
+          description: QRZ db serial number
+          type: string
+        moddate:
+          description: QRZ callsign last modified date
+          type: string
+        MSA:
+          description: Metro Service Area (USPS)
+          type: string
+        AreaCode:
+          description: Telephone Area Code (USA)
+          type: string
+        TimeZone:
+          description: Time Zone (USA)
+          type: string
+        GMTOffset:
+          description: GMT Time Offset
+          type: string
+        DST:
+          description: Daylight Saving Time Observed
+          type: string
+        eqsl:
+          description: Will accept e-qsl (0/1 or blank if unknown)
+          type: string
+        mqsl:
+          description: Will return paper QSL (0/1 or blank if unknown)
+          type: string
+        cqzone:
+          description: CQ Zone identifier
+          type: string
+        ituzone:
+          description: ITU Zone identifier
+          type: string
+        born:
+          description: operator's year of birth
+          type: number
+          format: int32
+        user:
+          description: User who manages this callsign on QRZ
+          type: string
+        lotw:
+          description: Will accept LOTW (0/1 or blank if unknown)
+          type: string
+        iota:
+          description: IOTA Designator (blank if unknown)
+          type: string
+        geoloc:
+          description: Describes source of lat/long data
+          type: string
+    DXCC:
+      type: object
+      properties:
+        dxcc:
+          description: DXCC entity number for this record
+          type: string
+        cc:
+          description: 2-letter country code (ISO-3166)
+          type: string
+        ccc:
+          description: 3-letter country code (ISO-3166)
+          type: string
+        name:
+          description: long name
+          type: string
+        continent:
+          description: 2-letter continent designator
+          type: string
+        ituzone:
+          description: ITU Zone
+          type: string
+        cqzone:
+          description: CQ Zone
+          type: string
+        timezone:
+          description: timezone offset +/- UTC in hours. Odd timezones, such as 0545 mean "5 hours, 45 minutes". The plus (+) sign is implied.
+          type: integer
+          format: int32
+        lat:
+          description: Latitude (approx.)
+          type: number
+          format: double
+        lon:
+          description: Longitude (approx.)
+          type: number
+          format: double
+        notes:
+          description: Special notes and/or exceptions
+          type: string
