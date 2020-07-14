@@ -1,6 +1,6 @@
 # \DefaultApi
 
-All URIs are relative to *https://xmldata.qrz.com/xml/1.33*
+All URIs are relative to *https://xmldata.qrz.com/xml/1.34*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

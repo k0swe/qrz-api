@@ -51,6 +51,9 @@ Name | Type | Description | Notes
 **Lotw** | **string** | Will accept LOTW (0/1 or blank if unknown) | [optional] 
 **Iota** | **string** | IOTA Designator (blank if unknown) | [optional] 
 **Geoloc** | **string** | Describes source of lat/long data | [optional] 
+**Attn** | **string** | Attention address line, this line should be prepended to the address | [optional] 
+**Nickname** | **string** | A different or shortened name used on the air | [optional] 
+**NameFmt** | **string** | Combined full name and nickname in the format used by QRZ. This fortmat is subject to change. | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

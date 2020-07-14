@@ -1,19 +1,19 @@
 openapi: 3.0.1
 info:
   contact:
-    email: flloyd@qrz.com
+    email: va7stv@qrz.com
   description: |-
     This document describes the interface specification for access to QRZ's XML subscription data service. This service provides real-time access to information from the QRZ.COM servers and databases.
     Access to this service requires user authentication through the use of a valid QRZ.COM username and password. While any QRZ user may login to the service, an active QRZ Logbook Data subscription is required to access most of its features. Non-subscriber access limits the data fields that are returned and is primarily intended for testing and troubleshooting purposes only.
     A description of subscription plans and rates is available on the [QRZ website](http://www.qrz.com/i/subscriptions.html).
   title: QRZ XML Logbook Data Specification
-  version: "1.33"
+  version: "1.34"
 externalDocs:
   description: Textual description of the spec
   url: https://www.qrz.com/XML/current_spec.html
 servers:
-- url: https://xmldata.qrz.com/xml/1.33
-- url: http://xmldata.qrz.com/xml/1.33
+- url: https://xmldata.qrz.com/xml/1.34
+- url: http://xmldata.qrz.com/xml/1.34
 paths:
   /:
     get:
@@ -266,6 +266,17 @@ components:
           type: string
         geoloc:
           description: Describes source of lat/long data
+          type: string
+        attn:
+          description: Attention address line, this line should be prepended to the
+            address
+          type: string
+        nickname:
+          description: A different or shortened name used on the air
+          type: string
+        name_fmt:
+          description: Combined full name and nickname in the format used by QRZ.
+            This fortmat is subject to change.
           type: string
       type: object
     DXCC:
