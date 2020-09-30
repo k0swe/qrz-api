@@ -1,4 +1,4 @@
-module github.com/xylo04/qrz-api
+module github.com/k0swe/qrz-api
 
 go 1.14
 

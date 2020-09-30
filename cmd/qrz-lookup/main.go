@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/xylo04/qrz-api"
+	"github.com/k0swe/qrz-api"
 	"os"
 )
 
