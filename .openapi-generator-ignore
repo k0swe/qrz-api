@@ -7,3 +7,4 @@
 go.mod
 git_push.sh
 .gitignore
+.travis.yml
