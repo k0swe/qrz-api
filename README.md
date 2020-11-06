@@ -1,3 +1,5 @@
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/k0swe/qrz-api)](https://pkg.go.dev/github.com/k0swe/qrz-api)
+
 # Go API client for qrz
 
 This document describes the interface specification for access to QRZ's XML subscription data service. This service provides real-time access to information from the QRZ.COM servers and databases.
