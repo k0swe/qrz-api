@@ -8,38 +8,47 @@ import (
 
 const agent = "xylo-go-1.0"
 
+var cachedUser = ""
+var cachedSession = ""
+
 func Lookup(user *string, pw *string, call *string) (*QrzDatabase, error) {
 	config := NewConfiguration()
 	config.UserAgent = agent
 	client := NewAPIClient(config)
 
-	sessResp, err := login(user, pw, client)
+	sessionKey, err := login(user, pw, client)
 	if err != nil {
 		return nil, err
 	}
 
-	sessionKey := sessResp.Session.Key
-	if sessionKey == "" {
-		return nil, errors.New(sessResp.Session.Error)
-	}
-
 	lookupResp, err := lookupInner(sessionKey, call, client)
 	if err != nil {
+		cachedSession = ""
+		// TODO: maybe session key expired; retry login?
 		return nil, err
 	}
 	return lookupResp, nil
 }
 
-func login(user *string, pw *string, client *APIClient) (*QrzDatabase, error) {
+func login(user *string, pw *string, client *APIClient) (string, error) {
+	if cachedUser != "" && cachedSession != "" {
+		return cachedSession, nil
+	}
 	req := new(RootGetOpts)
 	req.Username = optional.NewString(*user)
 	req.Password = optional.NewString(*pw)
 	req.Agent = optional.NewString(agent)
 	sessResp, _, err := client.DefaultApi.RootGet(context.TODO(), req)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return &sessResp, err
+	sessionKey := sessResp.Session.Key
+	if sessionKey == "" {
+		return "", errors.New(sessResp.Session.Error)
+	}
+	cachedUser = *user
+	cachedSession = sessionKey
+	return sessionKey, err
 }
 
 func lookupInner(sessionKey string, call *string, client *APIClient) (*QrzDatabase, error) {
