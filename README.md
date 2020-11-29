@@ -5,6 +5,7 @@
 
 A GoLang client library for QRZ.com's XML subscription data service. The service 
 provides real-time access to information from the QRZ.COM servers and databases.
+The API is documented [here](https://www.qrz.com/XML/current_spec.html).
 
 This client library was generated based on the OpenAPI specification in
 the `api/openapi.yaml` file. However, the API itself is not well-described by
