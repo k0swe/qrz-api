@@ -31,7 +31,7 @@ func Lookup(user *string, pw *string, call *string) (*QrzDatabase, error) {
 }
 
 func login(user *string, pw *string, client *APIClient) (string, error) {
-	if cachedUser != "" && cachedSession != "" {
+	if cachedUser == *user && cachedSession != "" {
 		return cachedSession, nil
 	}
 	req := new(RootGetOpts)
