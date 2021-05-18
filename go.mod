@@ -6,6 +6,6 @@ require (
 	github.com/antihax/optional v1.0.0
 	github.com/golang/protobuf v1.4.3 // indirect
 	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11 // indirect
-	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
+	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
 	google.golang.org/appengine v1.6.7 // indirect
 )
