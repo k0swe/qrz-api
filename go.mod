@@ -8,8 +8,6 @@ require (
 )
 
 require (
-	github.com/golang/protobuf v1.5.2 // indirect
-	golang.org/x/net v0.0.0-20220725212005-46097bf591d3 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	golang.org/x/net v0.0.0-20220809184613-07c6da5e1ced // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 )
