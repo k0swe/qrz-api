@@ -4,10 +4,10 @@ on:
   push:
     branches-ignore:
       # Renovate branches will immediately become PRs
-      - 'renovate/**'
+      - "renovate/**"
   pull_request:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   test-go:
@@ -18,7 +18,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.14.x
+          go-version: 1.19.x
 
       - name: Checkout code
         uses: actions/checkout@v4
