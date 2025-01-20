@@ -15,4 +15,5 @@ model_dxcc.go
 model_qrz_database.go
 model_session.go
 response.go
+test/api_default_test.go
 utils.go

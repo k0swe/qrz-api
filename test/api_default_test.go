@@ -11,7 +11,7 @@ package qrz
 
 import (
 	"context"
-	openapiclient "github.com/k0swe/qrz-logbook"
+	openapiclient "github.com/k0swe/qrz-api"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"

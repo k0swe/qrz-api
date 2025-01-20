@@ -22,7 +22,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/k0swe/qrz-logbook"
+	openapiclient "github.com/k0swe/qrz-api"
 )
 
 func main() {
