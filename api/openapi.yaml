@@ -12,67 +12,63 @@ externalDocs:
   description: Textual description of the spec
   url: https://www.qrz.com/XML/current_spec.html
 servers:
-- url: https://xmldata.qrz.com/xml/1.34
-- url: http://xmldata.qrz.com/xml/1.34
+  - url: https://xmldata.qrz.com/xml/1.34
+  - url: http://xmldata.qrz.com/xml/1.34
 paths:
   /:
     get:
       parameters:
-      - explode: true
-        in: query
-        name: username
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: password
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: agent
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: session token
-        explode: true
-        in: query
-        name: s
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: perform a callsign info lookup
-        explode: true
-        in: query
-        name: callsign
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: perform a DXCC info lookup
-        explode: true
-        in: query
-        name: dxcc
-        required: false
-        schema:
-          oneOf:
-          - type: number
-          - enum:
-            - all
+        - explode: true
+          in: query
+          name: username
+          required: false
+          schema:
             type: string
-        style: form
+          style: form
+        - explode: true
+          in: query
+          name: password
+          required: false
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: agent
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: session token
+          explode: true
+          in: query
+          name: s
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: perform a callsign info lookup
+          explode: true
+          in: query
+          name: callsign
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: perform a DXCC info lookup
+          explode: true
+          in: query
+          name: dxcc
+          required: false
+          schema:
+            $ref: "#/components/schemas/__get_dxcc_parameter"
+          style: form
       responses:
         "200":
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/QRZDatabase'
+                $ref: "#/components/schemas/QRZDatabase"
           description: response
       summary: The do-everything endpoint
 components:
@@ -80,28 +76,31 @@ components:
     QRZDatabase:
       properties:
         Session:
-          $ref: '#/components/schemas/Session'
+          $ref: "#/components/schemas/Session"
         Callsign:
-          $ref: '#/components/schemas/Callsign'
+          $ref: "#/components/schemas/Callsign"
         DXCC:
-          $ref: '#/components/schemas/DXCC'
+          $ref: "#/components/schemas/DXCC"
       type: object
     Session:
       properties:
         Key:
-          description: a valid user session key. A user session is established whenever
-            a session key is returned. Any response from the server that does not
-            contain the Key element indicates that no valid session exists and that
-            a re-login is required to continue.
+          description:
+            a valid user session key. A user session is established whenever a
+            session key is returned. Any response from the server that does not
+            contain the Key element indicates that no valid session exists and
+            that a re-login is required to continue.
           type: string
         Count:
-          description: Number of lookups performed by this user in the current 24
-            hour period
+          description:
+            Number of lookups performed by this user in the current 24 hour
+            period
           format: int64
           type: number
         SubExp:
-          description: time and date that the users subscription will expire - or
-            - "non-subscriber"
+          description:
+            time and date that the users subscription will expire - or -
+            "non-subscriber"
           format: asctime
           type: string
         GMTime:
@@ -121,7 +120,8 @@ components:
           description: callsign
           type: string
         xref:
-          description: 'Cross reference: the query callsign that returned this record'
+          description:
+            "Cross reference: the query callsign that returned this record"
           type: string
         aliases:
           description: Other callsigns that resolve to this record
@@ -136,10 +136,10 @@ components:
           description: last name
           type: string
         addr1:
-          description: 'address line 1 (i.e. house # and street)'
+          description: "address line 1 (i.e. house # and street)"
           type: string
         addr2:
-          description: address line 2 (i.e, city name)
+          description: "address line 2 (i.e, city name)"
           type: string
         state:
           description: state (USA Only)
@@ -216,7 +216,7 @@ components:
           format: uri
           type: string
         imageinfo:
-          description: height:width:size in bytes, of the image file
+          description: "height:width:size in bytes, of the image file"
           type: string
         serial:
           description: QRZ db serial number
@@ -268,15 +268,17 @@ components:
           description: Describes source of lat/long data
           type: string
         attn:
-          description: Attention address line, this line should be prepended to the
-            address
+          description: "Attention address line, this line should be prepended to
+            the\
+            \ address"
           type: string
         nickname:
           description: A different or shortened name used on the air
           type: string
         name_fmt:
-          description: Combined full name and nickname in the format used by QRZ.
-            This fortmat is subject to change.
+          description:
+            Combined full name and nickname in the format used by QRZ. This
+            fortmat is subject to change.
           type: string
       type: object
     DXCC:
@@ -303,8 +305,9 @@ components:
           description: CQ Zone
           type: string
         timezone:
-          description: timezone offset +/- UTC in hours. Odd timezones, such as 0545
-            mean "5 hours, 45 minutes". The plus (+) sign is implied.
+          description: "timezone offset +/- UTC in hours. Odd timezones, such as
+            0545\
+            \ mean \"5 hours, 45 minutes\". The plus (+) sign is implied."
           format: int32
           type: integer
         lat:
@@ -319,3 +322,9 @@ components:
           description: Special notes and/or exceptions
           type: string
       type: object
+    __get_dxcc_parameter:
+      oneOf:
+        - type: number
+        - enum:
+            - all
+          type: string

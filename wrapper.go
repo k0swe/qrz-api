@@ -3,7 +3,6 @@ package qrz
 import (
 	"context"
 	"errors"
-	"github.com/antihax/optional"
 )
 
 const agent = "k0swe-go-1.0"
@@ -11,7 +10,7 @@ const agent = "k0swe-go-1.0"
 var cachedUser = ""
 var cachedSession = ""
 
-func Lookup(ctx context.Context, user *string, pw *string, call *string) (*QrzDatabase, error) {
+func Lookup(ctx context.Context, user *string, pw *string, call *string) (*QRZDatabase, error) {
 	config := NewConfiguration()
 	config.UserAgent = agent
 	client := NewAPIClient(config)
@@ -33,31 +32,26 @@ func login(ctx context.Context, user *string, pw *string, client *APIClient) (st
 	if cachedUser == *user && cachedSession != "" {
 		return cachedSession, nil
 	}
-	req := new(RootGetOpts)
-	req.Username = optional.NewString(*user)
-	req.Password = optional.NewString(*pw)
-	req.Agent = optional.NewString(agent)
-	sessResp, _, err := client.DefaultApi.RootGet(ctx, req)
+	req := client.DefaultAPI.RootGet(ctx).Username(*user).Password(*pw).Agent(agent)
+	sessResp, _, err := req.Execute()
 	if err != nil {
 		return "", err
 	}
-	sessionKey := sessResp.Session.Key
+	sessionKey := *sessResp.Session.Key
 	if sessionKey == "" {
-		return "", errors.New(sessResp.Session.Error)
+		return "", errors.New(*sessResp.Session.Error)
 	}
 	cachedUser = *user
 	cachedSession = sessionKey
 	return sessionKey, err
 }
 
-func lookupInner(ctx context.Context, sessionKey string, call *string, client *APIClient) (*QrzDatabase, error) {
-	req := new(RootGetOpts)
-	req.S = optional.NewString(sessionKey)
-	req.Agent = optional.NewString(agent)
-	req.Callsign = optional.NewString(*call)
-	lookupResp, _, err := client.DefaultApi.RootGet(ctx, req)
+func lookupInner(ctx context.Context, sessionKey string, call *string, client *APIClient) (*QRZDatabase, error) {
+	req := client.DefaultAPI.RootGet(ctx).S(sessionKey).Agent(agent)
+	req = req.Callsign(*call)
+	lookupResp, _, err := req.Execute()
 	if err != nil {
 		return nil, err
 	}
-	return &lookupResp, nil
+	return lookupResp, nil
 }

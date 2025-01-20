@@ -24,9 +24,9 @@ func main() {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if lookupResp.Callsign == (qrz.Callsign{}) {
+	if *lookupResp.Callsign == (qrz.Callsign{}) {
 		fmt.Println(*call, "was not found")
 	} else {
-		fmt.Println(*call, "is", lookupResp.Callsign.Fname, lookupResp.Callsign.Name)
+		fmt.Println(*call, "is", *lookupResp.Callsign.Fname, *lookupResp.Callsign.Name)
 	}
 }
