@@ -1,5 +1,4 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/k0swe/qrz-api)](https://pkg.go.dev/github.com/k0swe/qrz-api)
-[![Go Report Card](https://goreportcard.com/badge/github.com/k0swe/qrz-api)](https://goreportcard.com/report/github.com/k0swe/qrz-api)
 
 # Go API client for QRZ.com
 
