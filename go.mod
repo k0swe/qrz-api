@@ -2,7 +2,7 @@ module github.com/k0swe/qrz-api
 
 go 1.26.0
 
-toolchain go1.27.2
+toolchain go1.27.3
 
 require (
 	github.com/antihax/optional v1.0.0
