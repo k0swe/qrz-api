@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Semantic version component to increment
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Create ${{ inputs.bump }} release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Test
+        run: |
+          go test ./...
+          go vet ./...
+
+      - name: Calculate next version
+        id: version
+        shell: bash
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          set -euo pipefail
+          previous_tag=$(git tag --list 'v[0-9]*' --sort=-version:refname | head -n 1)
+          if [[ -z "$previous_tag" ]]; then
+            echo "No stable vMAJOR.MINOR.PATCH tag found." >&2
+            exit 1
+          fi
+
+          version=${previous_tag#v}
+          if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "Latest stable tag '$previous_tag' is not valid semantic versioning." >&2
+            exit 1
+          fi
+
+          major=${BASH_REMATCH[1]}
+          minor=${BASH_REMATCH[2]}
+          patch=${BASH_REMATCH[3]}
+          case "$BUMP" in
+            major) ((major += 1)); minor=0; patch=0 ;;
+            minor) ((minor += 1)); patch=0 ;;
+            patch) ((patch += 1)) ;;
+            *) echo "Unsupported bump: $BUMP" >&2; exit 1 ;;
+          esac
+
+          next_tag="v${major}.${minor}.${patch}"
+          if git rev-parse --verify --quiet "refs/tags/$next_tag"; then
+            echo "Tag '$next_tag' already exists." >&2
+            exit 1
+          fi
+          echo "tag=$next_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release and tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
+            --generate-notes
